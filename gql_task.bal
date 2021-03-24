@@ -23,6 +23,11 @@ type Trail record {|
     Lift[] accessByLifts;
 |};
 
+type Subscription record {|
+    Lift liftStatusChange;
+    Trail trailStatusChange;
+|};
+
 Lift lift1 = {
     id: "a",
     name: "aa",
@@ -89,5 +94,31 @@ service graphql:Service / on new graphql:Listener(9000) {
 
     resource function get allTrails() returns Trail[] {
         return trails;
+    }
+
+    resource function get lift(string id) returns Lift|(){
+        foreach var lift in lifts {
+            if lift.id == id {
+                return lift;
+            }
+        }
+        return ();
+    }
+
+    resource function get trail(string id) returns Trail|(){
+        foreach var trail in trails {
+            if trail.id == id {
+                return trail;
+            }
+        }
+        return ();
+    }
+
+    resource function get trailCount () returns int{
+        return trails.length();
+    }
+
+    resource function get liftCount () returns int{
+        return lifts.length();
     }
 }
